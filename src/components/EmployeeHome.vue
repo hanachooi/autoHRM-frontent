@@ -57,17 +57,7 @@
               </div>
               <!-- 오른쪽 카드 -->
               <div class="col-md-6">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Vuejs</h5>
-                    <p class="card-text">
-                      Jassa<br />
-                      You can also try different version of Bootstrap V4 side menu. Click below link to view all Bootstrap Menu versions.
-                    </p>
-                    <a href="#" class="card-link">Link</a>
-                    <a href="#" class="card-link">Another link</a>
-                  </div>
-                </div>
+                <FindCommute/>
               </div>
             </div>
 
@@ -158,6 +148,7 @@
 <script setup>
 
 import CheckInStatus from "@/components/DashBoard/CheckInStatus.vue";
+import FindCommute from "@/components/DashBoard/FindCommute.vue";
 
 </script>
 
