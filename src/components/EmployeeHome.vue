@@ -1,22 +1,5 @@
 <template>
   <div>
-    <!-- 헤더바 -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-dark m-0">
-      <a class="navbar-brand ms-auto p-2 text-white" href="#">Jassa Admin</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item p-2">
-            <a class="nav-link text-secondary" href="#">Profile</a>
-          </li>
-          <li class="nav-item p-2">
-            <a class="nav-link text-secondary" href="#">Logout</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
 
 
 
@@ -24,29 +7,10 @@
     <div class="container-fluid">
       <div class="row">
         <!-- 사이드바 -->
-        <div class="col-md-1 bg-secondary vh-100">
-          <ul class="nav flex-column mt-4">
-            <a class="nav-link text-white" href="#">
-              <img src="../assets/dashboard.png" alt="Dashboard" />
-              dashboard
-            </a>
-            <a class="nav-link text-white" href="#">
-              <img src="../assets/apply.png" alt="Apply" />
-              apply
-            </a>
-            <a class="nav-link text-white" href="#">
-              <img src="../assets/apply.png" alt="Apply" />
-              alert
-            </a>
-            <a class="nav-link text-white" href="#">
-              <img src="../assets/apply.png" alt="Apply" />
-              ddd
-            </a>
-          </ul>
-        </div>
+
 
         <!-- 컨텐츠 영역 -->
-        <div class="col-md-10">
+        <div class="col-md-9">
           <div class="container mt-4">
             <div class="row">
               <!-- 왼쪽 카드 -->
@@ -154,7 +118,7 @@ import FindCommute from "@/components/DashBoard/FindCommute.vue";
 
 <style>
 .container {
-  max-width: 1200px;
+  max-width: 120px;
 }
 .card {
   margin-bottom: 20px;
