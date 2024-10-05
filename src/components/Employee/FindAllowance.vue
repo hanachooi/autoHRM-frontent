@@ -1,5 +1,7 @@
 <template>
     <div>
+      <div class="container-fluid">
+        <div class="row">
       <h5>Allowance 조회</h5>
       <div class="mb-3">
         <label for="monthSelector" class="form-label">월 선택:</label>
@@ -41,6 +43,8 @@
         </tbody>
       </table>
     </div>
+      </div>
+    </div>
 </template>
 
 <script setup>
@@ -58,7 +62,7 @@ const fetchAllowances = async () => {
   try {
 
     const token = localStorage.getItem('token');
-
+    console.log(token)
     const response = await axios.get(`http://localhost:8080/api/v1/allowance/my`, {
       params: {
         startOfMonth,
@@ -90,4 +94,5 @@ onMounted(fetchAllowances);
 .table {
   margin-top: 20px;
 }
+
 </style>

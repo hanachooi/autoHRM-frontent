@@ -36,28 +36,3 @@ export function isTokenExpired(token) {
     return decoded.exp < currentTime;
 }
 
-// 페이지 접근 검증 함수
-export function checkUserRole(requiredRoles) {
-    const token = getTokenFromHeader();
-    if (token) {
-        if (isTokenExpired(token)) {
-            console.warn('Token expired');
-            return false; // 토큰이 만료됨
-        }
-        const decoded = parseJwt(token);
-        if (decoded && decoded.role) {
-            if (requiredRoles.includes(decoded.role)) {
-                return true; // 접근 허용
-            } else {
-                console.warn(`Access Denied. Required Roles: ${requiredRoles}, User Role: ${decoded.role}`);
-                return false; // 접근 거부
-            }
-        } else {
-            console.warn('Invalid JWT payload');
-            return false; // JWT 토큰이 없으므로 접근 거부
-        }
-    } else {
-        console.warn('JWT token not found');
-        return false; // JWT 토큰이 없으므로 접근 거부
-    }
-}

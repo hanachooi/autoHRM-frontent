@@ -1,10 +1,6 @@
 <template>
   <div class="card-body">
     <h5 class="card-title">익일 출퇴근 현황</h5>
-    <p class="card-text">
-      Jassa<br />
-      You can also try different version of Bootstrap V4 side menu. Click below link to view all Bootstrap Menu versions.
-    </p>
 
     <!-- 출근 상태 메시지 및 동그라미 -->
     <div>
@@ -14,8 +10,6 @@
       </span>
     </div>
 
-    <a href="#" class="card-link">Link</a>
-    <a href="#" class="card-link">Another link</a>
   </div>
 </template>
 

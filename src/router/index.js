@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import {checkUserRole} from "@/utils/auth";
 import SignIn from "@/components/SignIn.vue";
-import EmployeeHome from "@/components/EmployeeHome.vue";
-import FindAllowance from "@/components/DashBoard/FindAllowance.vue";
+import FindAllowance from "@/components/Employee/FindAllowance.vue";
+import CompanyJoin from "@/components/CreateCompany.vue"
+import ManagerHome from "@/components/Manager/ManagerHome.vue";
+import EmployeeHome from "@/components/Employee/EmployeeHome.vue";
 // import Dashboard from "../views/Dashboard.vue";
 
 const routes = [
@@ -12,9 +14,19 @@ const routes = [
         component: SignIn
     },
     {
-        path: "/home",
+        path: '/company-join',
+        name: 'CompanyJoin',
+        component: CompanyJoin
+    },
+    {
+        path: "/employee/home",
         name: "EmployeeHome",
         component: EmployeeHome,
+    },
+    {
+        path: "/manager/home",
+        name: "ManagerHome",
+        component: ManagerHome,
     },
     {
         path: "/sign-in",
@@ -48,3 +60,5 @@ router.beforeEach((to, from, next) => {
     }
 });
 export default router;
+
+
