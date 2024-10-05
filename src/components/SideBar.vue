@@ -6,13 +6,13 @@
 
     <ul class="nav flex-column">
       <li>
-        <a class="nav-link" href="/employee-home">
+        <a class="nav-link" href="/manager/home">
           <img src="../assets/logo.png" alt="Dashboard" class="icon" />
           Dashboard
         </a>
       </li>
       <li>
-        <a class="nav-link" href="/allowance">
+        <a class="nav-link" href="/manager/employee/create">
           <img src="../assets/logo.png" alt="Components" class="icon" />
           Components
         </a>

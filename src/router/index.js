@@ -5,6 +5,7 @@ import FindAllowance from "@/components/Employee/FindAllowance.vue";
 import CompanyJoin from "@/components/CreateCompany.vue"
 import ManagerHome from "@/components/Manager/ManagerHome.vue";
 import EmployeeHome from "@/components/Employee/EmployeeHome.vue";
+import EmployeeCreate from "@/components/Manager/EmployeeCreate.vue";
 // import Dashboard from "../views/Dashboard.vue";
 
 const routes = [
@@ -37,6 +38,11 @@ const routes = [
         path:"/allowance",
         name:"Allowance",
         component: FindAllowance
+    },
+    {
+        path:"/manager/employee/create",
+        name:"CreateEmployee",
+        component: EmployeeCreate
     }
 ];
 
