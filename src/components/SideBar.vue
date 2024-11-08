@@ -1,44 +1,44 @@
 <template>
   <div class="sidebar">
     <div class="sidebar-header">
-      <img src="../assets/logo1.png" alt="Logo" class="logo" />
+      <h2>AHM COMPANY.</h2>
     </div>
 
     <ul class="nav flex-column">
       <li>
         <a class="nav-link" href="/manager/home">
-          <img src="../assets/logo.png" alt="Dashboard" class="icon" />
-          Dashboard
+          <img src="../assets/logo.png" alt="사원관리" class="icon" />
+          사원정보관리
         </a>
       </li>
       <li>
         <a class="nav-link" href="/manager/employee/create">
           <img src="../assets/logo.png" alt="Components" class="icon" />
-          Components
+          신규사원등록
         </a>
       </li>
       <li>
-        <a class="nav-link" href="/icons">
+        <a class="nav-link" href="/manager/employees">
           <img src="../assets/logo.png" alt="Icons" class="icon" />
-          Icons
+          사원출퇴근관리
         </a>
       </li>
       <li>
         <a class="nav-link" href="/widgets">
           <img src="../assets/logo.png" alt="Widgets" class="icon" />
-          Widgets
+          외근/휴가/정정 관리
         </a>
       </li>
       <li>
         <a class="nav-link" href="/charts">
           <img src="../assets/logo.png" alt="Charts" class="icon" />
-          Charts
+          월급관리
         </a>
       </li>
       <li>
         <a class="nav-link" href="/pages">
           <img src="../assets/logo.png" alt="Pages" class="icon" />
-          Pages
+          지원
         </a>
       </li>
     </ul>
@@ -46,9 +46,21 @@
 </template>
 
 <style scoped>
+
+@font-face {
+  font-family: 'Bold';
+  src: url('../assets/NEXONLv1GothicBold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+h2{
+  font-family: 'Bold', sans-serif;
+}
+
+
 .sidebar {
   width: 250px;
-  background-color: #2e3b4e;
+  background-color: #141464;
   color: white;
   height: 100vh;
   display: flex;

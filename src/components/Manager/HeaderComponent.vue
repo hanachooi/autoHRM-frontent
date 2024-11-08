@@ -1,11 +1,11 @@
 <template>
   <header class="header">
     <div class="header-left">
-      <img src="../../assets/logo1.png" alt="Logo" class="logo" />
+      <img src="../../assets/logo.png" alt="Logo" class="logo" />
       <nav class="nav-menu">
-        <a href="/dashboard" class="nav-link">Dashboard</a>
-        <a href="/users" class="nav-link">Users</a>
-        <a href="/settings" class="nav-link">Settings</a>
+        <a href="/dashboard" class="nav-link">회사</a>
+        <a href="/users" class="nav-link">관리자</a>
+        <a href="/settings" class="nav-link">계정입니다.</a>
       </nav>
     </div>
 
@@ -30,11 +30,6 @@
 .header-left {
   display: flex;
   align-items: center;
-}
-
-.logo {
-  height: 40px;
-  margin-right: 20px;
 }
 
 .nav-menu {
@@ -76,6 +71,13 @@
   font-size: 16px;
   font-weight: 500;
   color: #5a5a5a;
+}
+
+.logo {
+  width: 50px; /* 이미지 너비를 적절히 제한 */
+  height: 50px;
+  display: block;
+  margin-right: 20px;
 }
 
 </style>

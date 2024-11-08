@@ -1,54 +1,55 @@
 <template>
-  <div class="signup-form">
-    <h2>Sign Up</h2>
-    <form @submit.prevent="submitForm">
-      <!-- Email -->
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" v-model="joinDTO.email" required />
-      </div>
+  <div class="layout">
+    <div class="main-content">
+      <h2>신규 사원 등록</h2>
+      <form @submit.prevent="submitForm">
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">사원이메일</label>
+          <input type="email" id="email" v-model="joinDTO.email" required />
+        </div>
 
-      <!-- Name -->
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" v-model="joinDTO.name" required />
-      </div>
+        <!-- Name -->
+        <div class="form-group">
+          <label for="name">사원이름</label>
+          <input type="text" id="name" v-model="joinDTO.name" required />
+        </div>
 
-      <!-- Password -->
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model="joinDTO.password" required />
-      </div>
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input type="password" id="password" v-model="joinDTO.password" required />
+        </div>
 
-      <!-- Role -->
-      <div class="form-group">
-        <label for="role">Role</label>
-        <select id="role" v-model="joinDTO.role" required>
-          <option value="ROLE_USER">사원</option>
-          <option value="ROLE_ADMIN">관리자</option>
-        </select>
-      </div>
+        <!-- Role -->
+        <div class="form-group">
+          <label for="role">권한</label>
+          <select id="role" v-model="joinDTO.role" required>
+            <option value="ROLE_USER">사원</option>
+            <option value="ROLE_ADMIN">관리자</option>
+          </select>
+        </div>
 
-      <!-- Department (select department by name, store the ID) -->
-      <div class="form-group">
-        <label for="department">Department</label>
-        <select id="department" v-model.number="joinDTO.departmentId" required>
-          <option v-for="department in departments" :key="department.departmentId" :value="department.departmentId">
-            {{ department.departmentName }}
-          </option>
-        </select>
+        <!-- Department -->
+        <div class="form-group">
+          <label for="department">부서</label>
+          <select id="department" v-model.number="joinDTO.departmentId" required>
+            <option v-for="department in departments" :key="department.departmentId" :value="department.departmentId">
+              {{ department.departmentName }}
+            </option>
+          </select>
+        </div>
 
-      </div>
+        <!-- Company Name -->
+        <div class="form-group">
+          <label for="companyName">회사명</label>
+          <input type="text" id="companyName" v-model="joinDTO.companyName" required />
+        </div>
 
-      <!-- Company Name -->
-      <div class="form-group">
-        <label for="companyName">Company Name</label>
-        <input type="text" id="companyName" v-model="joinDTO.companyName" required />
-      </div>
-
-      <!-- Submit Button -->
-      <button type="submit">Register</button>
-    </form>
+        <!-- Submit Button -->
+        <button type="submit">등록</button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -56,21 +57,17 @@
 import { reactive, ref, onMounted } from 'vue';
 import axios from 'axios';
 
-// Reactive object for joinDTO
 const joinDTO = reactive({
   email: '',
   name: '',
   password: '',
-  role: 'USER', // Default role as 'USER'
+  role: 'USER',
   departmentId: null,
   companyName: ''
 });
 
-// Department list
 const departments = ref([]);
 
-
-// Fetch departments on mount
 onMounted(async () => {
   try {
     const token = localStorage.getItem('token');
@@ -87,10 +84,8 @@ onMounted(async () => {
   }
 });
 
-// Form submit handler
 const submitForm = async () => {
   try {
-    // Sending POST request to backend
     const response = await axios.post('http://localhost:8080/join', joinDTO, {
       headers: {
         'Content-Type': 'application/json',
@@ -105,48 +100,72 @@ const submitForm = async () => {
     alert('Registration failed. Please try again.');
   }
 };
-
 </script>
 
 <style scoped>
-.signup-form {
-  max-width: 600px;
-  margin: 0 auto;
+@font-face {
+  font-family: 'Bold';
+  src: url('../../assets/NEXONLv1GothicBold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+h2{
+  font-family: 'Bold', sans-serif;
+}
+.layout {
+  display: flex;
+  justify-content: flex-start; /* 왼쪽으로 정렬 */
+  padding-top: 30px; /* 세로 상단 위치 */
+  width: calc(100% - 250px); /* 사이드바 너비(250px)를 제외한 전체 폭 */
+  margin-left: 400px; /* 사이드바 너비만큼 왼쪽 마진 */
+}
+
+.main-content {
+  max-width: 800px;
+  width: 650px;
+  margin: 0 auto; /* 가로 중앙 정렬 */
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #f9f9f9;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: left;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
 }
 
 label {
-  font-weight: bold;
   display: block;
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
 input,
 select {
   width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 button {
-  background-color: #4a90e2;
+  background-color: #141464;
   color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   width: 100%;
-  margin-top: 20px;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 button:hover {
-  background-color: #357ab8;
+  background-color: #0f0f52;
 }
 </style>

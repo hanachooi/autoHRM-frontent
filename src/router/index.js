@@ -2,22 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 import {checkUserRole} from "@/utils/auth";
 import SignIn from "@/components/SignIn.vue";
 import FindAllowance from "@/components/Employee/FindAllowance.vue";
-import CompanyJoin from "@/components/CreateCompany.vue"
 import ManagerHome from "@/components/Manager/ManagerHome.vue";
 import EmployeeHome from "@/components/Employee/EmployeeHome.vue";
 import EmployeeCreate from "@/components/Manager/EmployeeCreate.vue";
-// import Dashboard from "../views/Dashboard.vue";
 
 const routes = [
     {
         path: '/',
         name: 'signin',
         component: SignIn
-    },
-    {
-        path: '/company-join',
-        name: 'CompanyJoin',
-        component: CompanyJoin
     },
     {
         path: "/employee/home",
@@ -29,6 +22,11 @@ const routes = [
         name: "ManagerHome",
         component: ManagerHome,
     },
+        {
+        path:"/manager/employee/create",
+        name:"CreateEmployee",
+        component: EmployeeCreate
+    },
     {
         path: "/sign-in",
         name: "SignIn",
@@ -38,11 +36,6 @@ const routes = [
         path:"/allowance",
         name:"Allowance",
         component: FindAllowance
-    },
-    {
-        path:"/manager/employee/create",
-        name:"CreateEmployee",
-        component: EmployeeCreate
     }
 ];
 
