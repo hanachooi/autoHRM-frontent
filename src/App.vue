@@ -27,7 +27,7 @@ import SideBar from "@/components/SideBar.vue";
 
 const route = useRoute();
 const showHeaderBar = computed(() => {
-  return !['/company-join', '/'].includes(route.path);
+  return !['/company-join', '/employee/home', '/'].includes(route.path);
 });
 </script>
 

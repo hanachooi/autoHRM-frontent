@@ -2,9 +2,8 @@
     <div>
       <div class="container-fluid">
         <div class="row">
-      <h5>Allowance 조회</h5>
       <div class="mb-3">
-        <label for="monthSelector" class="form-label">월 선택:</label>
+        <label for="monthSelector" class="form-label">조회할 년/월 선택 </label>
         <input
             type="month"
             id="monthSelector"

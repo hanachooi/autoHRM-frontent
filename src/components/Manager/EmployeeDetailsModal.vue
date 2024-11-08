@@ -1,45 +1,95 @@
 <template>
   <div v-if="email" class="modal">
     <div class="modal-content">
-      <span class="close" @click="emitClose">&times;</span>
+      <span class="close" @click="emitClose">닫기</span>
 
-      <!-- Employee Info Display -->
+      <!-- Employee Info Table -->
       <div v-if="employeeData">
-        <h3>{{ employeeData.name }}사원 상세 관리</h3>
-        <p><strong>사원명:</strong> {{ employeeData.name || '등록을 해야 합니다' }}</p>
-        <p><strong>회사명:</strong> {{ employeeData.companyName || '등록을 해야 합니다' }}</p>
-        <p><strong>부서명:</strong> {{ employeeData.departmentName || '등록을 해야 합니다' }}</p>
-        <p><strong>기본급:</strong> {{ employeeData.baseSalary !== null ? employeeData.baseSalary : '등록을 해야 합니다' }}</p>
-        <p><strong>연도:</strong> {{ employeeData.year !== null ? employeeData.year : '등록을 해야 합니다' }}</p>
-        <p><strong>월:</strong> {{ employeeData.month !== null ? employeeData.month : '등록을 해야 합니다' }}</p>
-        <p><strong>임금:</strong> {{ employeeData.wage !== null ? employeeData.wage : '등록을 해야 합니다' }}</p>
-        <p><strong>분 단위 임금:</strong> {{ employeeData.minuteWage !== null ? employeeData.minuteWage : '등록을 해야 합니다' }}</p>
-        <p><strong>급여:</strong> {{ employeeData.salary !== null ? employeeData.salary : '등록을 해야 합니다' }}</p>
-        <p><strong>주간 일정:</strong> {{ employeeData.weeklySchedule || '등록을 해야 합니다' }}</p>
+        <h3>{{ employeeData.name }} 사원 상세 관리</h3>
+        <table class="employee-table">
+          <tr>
+            <th>사원명</th>
+            <td>{{ employeeData.name || '등록을 해야 합니다' }}</td>
+          </tr>
+          <tr>
+            <th>회사명</th>
+            <td>{{ employeeData.companyName || '등록을 해야 합니다' }}</td>
+          </tr>
+          <tr>
+            <th>부서명</th>
+            <td>{{ employeeData.departmentName || '등록을 해야 합니다' }}</td>
+          </tr>
+          <tr>
+            <th>기본급</th>
+            <td>{{ employeeData.baseSalary !== null ? employeeData.baseSalary : '등록을 해야 합니다' }}</td>
+          </tr>
+          <tr>
+            <th>연도</th>
+            <td>{{ employeeData.year !== null ? employeeData.year : '등록을 해야 합니다' }}</td>
+          </tr>
+          <tr>
+            <th>월</th>
+            <td>{{ employeeData.month !== null ? employeeData.month : '등록을 해야 합니다' }}</td>
+          </tr>
+          <tr>
+            <th>임금</th>
+            <td>{{ employeeData.wage !== null ? employeeData.wage : '등록을 해야 합니다' }}</td>
+          </tr>
+          <tr>
+            <th>분 단위 임금</th>
+            <td>{{ employeeData.minuteWage !== null ? employeeData.minuteWage : '등록을 해야 합니다' }}</td>
+          </tr>
+          <tr>
+            <th>급여</th>
+            <td>{{ employeeData.salary !== null ? employeeData.salary : '등록을 해야 합니다' }}</td>
+          </tr>
+          <!-- Weekly Schedule -->
+          <tr>
+            <th>주간 일정</th>
+            <td>
+              <table class="weekly-schedule">
+                <tr v-if="!employeeData.weeklySchedule || Object.keys(employeeData.weeklySchedule).length === 0">
+                  <td colspan="2" class="no-schedule">등록을 해야 합니다</td>
+                </tr>
+                <tr v-else v-for="day in orderedDays" :key="day">
+                  <th>{{ day }}</th>
+                  <td>{{ getScheduleType(employeeData.weeklySchedule[day]) || '등록을 해야 합니다' }}</td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+        </table>
       </div>
 
       <!-- Additional Action Buttons -->
       <div class="additional-buttons">
-        <button @click="registerSchedule">사원 스케줄 등록</button>
-        <button @click="registerBaseSalary">기본급 등록</button>
-        <button @click="close">닫기</button>
+        <button class="action-button" @click="registerSchedule">사원 스케줄 등록</button>
+        <button class="action-button" @click="registerBaseSalary">기본급 등록</button>
       </div>
 
-
+      <!-- ScheduleRegisterModal 모달 -->
       <ScheduleRegisterModal
           v-if="isScheduleModalOpen"
           :email="email"
           @close="isScheduleModalOpen = false"
       />
-  </div>
+
+      <!-- BaseSalaryModal 모달 -->
+      <BaseSalaryModal
+          v-if="isSalaryModalOpen"
+          :email="email"
+          @close="isSalaryModalOpen = false"
+      />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import {ref, watch} from 'vue';
 import axios from 'axios';
 import ScheduleRegisterModal from '@/components/Manager/ScheduleRegisterModal.vue';
-
+import BaseSalaryModal from '@/components/Manager/BaseSalaryModal.vue';
 
 // Props
 // eslint-disable-next-line no-undef
@@ -53,23 +103,37 @@ const props = defineProps({
 // Emits
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['close']);
+const emitClose = () => emit('close');
 
 // Data properties for employee
 const employeeData = ref(null);
-const employeeName = ref('');
-const employeeDepartment = ref('');
 const isScheduleModalOpen = ref(false);
+const isSalaryModalOpen = ref(false);
+
+// 요일 순서
+const orderedDays = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"];
+
+// Schedule type 변환 함수
+const getScheduleType = (schedule) => {
+  switch (schedule) {
+    case "WORK":
+      return "근무일";
+    case "DAYOFF":
+      return "휴무일";
+    case "HOLIDAY":
+      return "휴일";
+    default:
+      return "등록을 해야 합니다";
+  }
+};
 
 // Fetch employee data function
 const fetchEmployeeData = async (email) => {
   try {
-    console.log("Fetching data for email:", email);
     const response = await axios.get('http://localhost:8080/api/v1/employee', {
-      params: { employeeEmail: email },
+      params: {employeeEmail: email},
     });
     employeeData.value = response.data;
-    employeeName.value = response.data.name;
-    employeeDepartment.value = response.data.departmentName;
   } catch (error) {
     console.error('Error fetching employee data:', error);
   }
@@ -83,25 +147,16 @@ watch(
         await fetchEmployeeData(newEmail);
       }
     },
-    { immediate: true }
+    {immediate: true}
 );
 
-// Close modal function
-const emitClose = () => {
-  emit('close');
-};
-
-// Submit form function
-const close = () => {
-  emitClose(); // Close modal after submission
-};
-
+// 모달 열기 함수들
 const registerSchedule = () => {
-  isScheduleModalOpen.value = true;  // 이 부분이 모달 열기 상태 설정
+  isScheduleModalOpen.value = true;
 };
 
 const registerBaseSalary = () => {
-  console.log('Register base salary for:', props.email);
+  isSalaryModalOpen.value = true;
 };
 </script>
 
@@ -124,58 +179,77 @@ const registerBaseSalary = () => {
   border-radius: 10px;
   text-align: center;
   position: relative;
-  width: 400px;
+  width: 500px;
 }
 
 .close {
   position: absolute;
   top: 10px;
-  right: 10px;
-  font-size: 20px;
+  right: 20px;
+  font-size: 16px;
   cursor: pointer;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
+  color: #0f0f52;
   font-weight: bold;
 }
 
-input {
+.employee-table {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-button {
-  background-color: #4a90e2;
-  color: white;
+.employee-table th,
+.employee-table td {
   padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.employee-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  width: 30%;
+}
+
+.weekly-schedule {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.weekly-schedule th,
+.weekly-schedule td {
+  padding: 5px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.additional-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.action-button {
+  background-color: #0f0f52;
+  color: white;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #357ab8;
+.action-button:hover {
+  background-color: #080833;
 }
 
-.additional-buttons {
-  margin-top: 20px;
+@font-face {
+  font-family: 'Bold';
+  src: url('../../assets/NEXONLv1GothicBold.ttf') format('truetype');
+  font-weight: 700;
 }
 
-.additional-buttons button {
-  margin-right: 10px;
-  padding: 10px 20px;
-}
-
-.additional-buttons button:hover {
-  background-color: #357ab8;
+h3{
+  font-family: 'Bold', sans-serif;
 }
 </style>

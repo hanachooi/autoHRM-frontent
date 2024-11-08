@@ -1,83 +1,197 @@
 <template>
-  <div class="layout">
+  <div class="employee-page">
+    <!-- 근무 정보 상단 섹션 -->
+    <CheckInStatus />
 
-    <div class="main-content">
-      <FindCommute/>
+    <!-- 신청하기 섹션 -->
+    <div class="request-section">
+      <h3 class="section-title" @click="toggleRequestSection">
+        신청하기 <span class="arrow">{{ isRequestOpen ? "˄" : "˅" }}</span>
+      </h3>
+      <div class="divider"></div>
+      <div v-if="isRequestOpen" class="request-cards">
+        <div class="card" @click="openFieldApplyModal">
+          <img src="../../assets/workout.png" alt="icon" class="icon" />
+          <p class="card-title">외근 신청</p>
+          <p class="card-description">폼으로 이동</p>
+        </div>
+        <div class="card" @click="openHolidayApplyModal">
+          <img src="../../assets/vacation.png" alt="icon" class="icon" />
+          <p class="card-title">휴가 신청</p>
+          <p class="card-description">폼으로 이동</p>
+        </div>
+        <div class="card" @click="openReviseApplyModal">
+          <img src="../../assets/apply.png" alt="icon" class="icon" />
+          <p class="card-title">출퇴근 이의</p>
+          <p class="card-description">폼으로 이동</p>
+        </div>
+      </div>
     </div>
-    <div class="grid-item">
-      <button class="btn holiday">휴가 신청</button>
-      <button class="btn field">외근 신청</button>
+
+    <!-- 근무 시간 그래프 섹션 -->
+    <div class="work-hours-section">
+      <h3>근무 조회</h3>
+      <div class="chart">
+        <FindCommute />
+      </div>
     </div>
-    <div class="grid-item"><CheckInStatus/></div>
-    <div class="grid-item"><ReviseApply/></div>
+    <div class="work-hours-section">
+      <h3>수당 조회</h3>
+      <div class="chart">
+        <FindAllowance />
+      </div>
+    </div>
+
+    <!-- 외근 신청 모달 -->
+    <FieldApplyModal :isOpen="isFieldApplyModalOpen" @close="closeFieldApplyModal" />
+
+    <!-- 휴가 신청 모달 -->
+    <HolidayApplyModal :isOpen="isHolidayApplyModalOpen" @close="closeHolidayApplyModal" />
+
+    <!-- 출퇴근 이의 모달 -->
+    <ReviseApplyModal :isOpen="isReviseApplyModalOpen" @close="closeReviseApplyModal" />
   </div>
 </template>
 
 <script setup>
-
+import { ref } from "vue";
 import FindCommute from "@/components/Employee/FindCommute.vue";
+import FindAllowance from "@/components/Employee/FindAllowance.vue";
 import CheckInStatus from "@/components/Employee/CheckInStatus.vue";
-import ReviseApply from "@/components/Employee/ReviseApply.vue";
+import FieldApplyModal from "@/components/Employee/FieldApplyModal.vue";
+import HolidayApplyModal from "@/components/Employee/HolidayApplyModal.vue";
+import ReviseApplyModal from "@/components/Employee/ReviseApplyModal.vue";
 
+const isRequestOpen = ref(false);
+const isFieldApplyModalOpen = ref(false);
+const isHolidayApplyModalOpen = ref(false);
+const isReviseApplyModalOpen = ref(false);
+
+const toggleRequestSection = () => {
+  isRequestOpen.value = !isRequestOpen.value;
+};
+
+const openFieldApplyModal = () => {
+  isFieldApplyModalOpen.value = true;
+};
+
+const closeFieldApplyModal = () => {
+  isFieldApplyModalOpen.value = false;
+};
+
+const openHolidayApplyModal = () => {
+  isHolidayApplyModalOpen.value = true;
+};
+
+const closeHolidayApplyModal = () => {
+  isHolidayApplyModalOpen.value = false;
+};
+
+const openReviseApplyModal = () => {
+  isReviseApplyModalOpen.value = true;
+};
+
+const closeReviseApplyModal = () => {
+  isReviseApplyModalOpen.value = false;
+};
 </script>
 
+
 <style scoped>
-.layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr; /* 첫 번째는 넓은 영역, 두 번째는 좁은 영역 */
-  grid-template-areas:
-    "main content1"
-    "main content2"
-    "main content3";
-  grid-gap: 20px;
-  height: 100vh; /* 높이를 전체 화면에 맞춤 */
-  width: 85vw;
-  padding: 30px;
-}
-
-.main-content {
-  grid-area: main;
-  border: 1px #333;
-  background-color: #f9f9f9;
+.employee-page {
   padding: 20px;
+  width: 100vw;
 }
 
-.grid-item:nth-child(2) {
-  grid-area: content1;
-}
-
-.grid-item:nth-child(3) {
-  grid-area: content2;
-}
-
-.grid-item:nth-child(4) {
-  grid-area: content3;
-}
-
-.grid-item {
-  border: 2px #333;
-  padding: 20px;
-  background-color: #f9f9f9;
-}
-.btn {
+.request-section {
+  margin: 20px auto; /* 가로 중앙 정렬 */
+  background: linear-gradient(to right, #89ace2, #c4b4dc, #e4d4e4);
   padding: 10px 20px;
-  font-size: 16px;
-  margin: 10px;
-  border-radius: 5px;
+  border-radius: 15px;
+  width: 85%;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  border: none;
-}
-.btn.holiday {
-  background-color: #007bff;
-  color: white;
 }
 
-.btn.field {
-  background-color: #6c757d;
-  color: white;
+.arrow {
+  font-size: 18px;
+  margin-left: 5px;
 }
 
-.btn:hover {
-  opacity: 0.9;
+.divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.6);
+  margin: 10px 0;
+}
+
+.request-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.card {
+  background-color: transparent;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.card-description {
+  font-size: 12px;
+}
+
+.work-hours-section {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.chart {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #888;
+}
+
+@font-face {
+  font-family: "Bold";
+  src: url("../../assets/NEXONLv1GothicBold.ttf") format("truetype");
+  font-weight: 700;
+}
+
+h3 {
+  font-family: "Bold", sans-serif;
 }
 </style>

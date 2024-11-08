@@ -14,7 +14,7 @@
       <div v-for="(scheduleType, day) in scheduleRequest.schedule" :key="day" class="form-group">
         <label :for="day">{{ day }}:</label>
         <select :id="day" v-model="scheduleRequest.schedule[day]">
-          <option disabled value="">스케줄 타입 선택</option>
+          <option disabled value="">근무유형 선택</option>
           <option value="WORK">근무일</option>
           <option value="DAYOFF">휴무일</option>
           <option value="HOLIDAY">휴일</option>
@@ -78,5 +78,74 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Styles... */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+  width: 400px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #0f0f52;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #080833;
+}
+
+@font-face {
+  font-family: 'Bold';
+  src: url('../../assets/NEXONLv1GothicBold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+h3{
+  font-family: 'Bold', sans-serif;
+}
 </style>
+

@@ -1,16 +1,14 @@
 <template>
   <div>
     <div>
-      <h5>출퇴근 조회</h5>
-
       <div>
-        <label for="filterType">필터 타입:</label>
+        <label for="filterType"></label>
         <select v-model="filterType">
           <option value="week">주별</option>
           <option value="month">달별</option>
         </select>
 
-        <label for="startDate">시작 날짜:</label>
+        <label for="startDate">조회 날짜:</label>
         <input type="date" v-model="startDate" />
 
         <button @click="fetchCommutes">조회</button>
@@ -41,6 +39,7 @@
       <div v-if="tooltip.visible" class="tooltip" :style="tooltip.position">
         {{ tooltip.time }}
       </div>
+
     </div>
   </div>
 </template>
