@@ -30,7 +30,7 @@
         </a>
       </li>
       <li>
-        <a class="nav-link" href="/charts">
+        <a class="nav-link" href="/manager/salaries">
           <img src="../assets/logo.png" alt="Charts" class="icon" />
           월급관리
         </a>
