@@ -6,6 +6,7 @@ import ManagerHome from "@/components/Manager/ManagerHome.vue";
 import EmployeeHome from "@/components/Employee/EmployeeHome.vue";
 import EmployeeCreate from "@/components/Manager/EmployeeCreate.vue";
 import SalariesComponent from "@/components/Manager/SalariesComponent.vue";
+import PayCheckout from "@/components/Manager/PayCheckout.vue";
 
 const routes = [
     {
@@ -42,7 +43,12 @@ const routes = [
         path:"/manager/salaries",
         name:"Salaries",
         component: SalariesComponent
-    }
+    },
+    {
+        path: "/manager/pay",
+        name: "PayComponent",
+        component: PayCheckout,
+    },
 ];
 
 const router = createRouter({

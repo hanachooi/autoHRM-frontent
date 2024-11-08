@@ -26,7 +26,7 @@
             <td>{{ salary.unpaid.toLocaleString() }} 원</td>
             <td>{{ salary.status ? "지급 완료" : "미지급" }}</td>
             <td>
-              <a v-if="!salary.status" href="https://example.com/payment" class="pay-button">지급하러가기</a>
+              <a v-if="!salary.status" href="/manager/pay" class="pay-button">지급하러가기</a>
             </td>
           </tr>
         </template>
