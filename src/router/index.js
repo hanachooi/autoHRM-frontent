@@ -9,6 +9,7 @@ import SalariesComponent from "@/components/Manager/SalariesComponent.vue";
 import PayCheckout from "@/components/Manager/PayCheckout.vue";
 import PaySuccess from "@/components/Manager/PaySuccess.vue";
 import PayFail from "@/components/Manager/PayFail.vue";
+import EmployeeCommutes from "@/components/Manager/EmployeeCommutes.vue";
 
 const routes = [
     {
@@ -68,6 +69,11 @@ const routes = [
         path: "/manager/pay/fail",
         name: "PayFail",
         component: PayFail,
+    },
+    {
+        path: "/manager/commutes",
+        name: "EmployeeCommutes",
+        component: EmployeeCommutes,
     },
 ];
 

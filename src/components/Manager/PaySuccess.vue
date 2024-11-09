@@ -44,7 +44,7 @@ const confirmPayment = async () => {
 
     if (response.status === 200) {
       console.log('월급 반영 성공');
-      await router.push(`/manager/pay`);
+      await router.push(`/manager/salaries`);
     } else {
       await router.push(`/manager/pay/fail`);
     }

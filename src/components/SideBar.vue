@@ -18,7 +18,7 @@
         </a>
       </li>
       <li>
-        <a class="nav-link" href="/manager/employees">
+        <a class="nav-link" href="/manager/commutes">
           <img src="../assets/logo.png" alt="Icons" class="icon" />
           사원출퇴근관리
         </a>
