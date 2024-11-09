@@ -1,20 +1,30 @@
 <template>
   <div>
-    <h2>결제 성공</h2>
-    <p>주문번호: {{ orderId }}</p>
-    <p>결제 금액: {{ amount }}원</p>
-    <p>paymentKey: {{ paymentKey }}</p>
+    <h2>임금 지급 완료</h2>
+    <p>지급번호: {{ orderId }}</p>
+
+    <p>지급대상사원: {{name}}</p>
+    <p>지급금액: {{ amount }}원</p>
   </div>
 </template>
 
+
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import {ref, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
 
 const paymentKey = ref(null);
 const orderId = ref(null);
 const amount = ref(null);
+const name = ref(null);
+const email = ref(null);
+const year = ref(null);
+const month = ref(null);
 const router = useRouter();
+
+
+
+
 
 // 서버에 결제 확인 요청을 보냅니다.
 const confirmPayment = async () => {
@@ -41,7 +51,6 @@ const confirmPayment = async () => {
       router.push(`/fail?message=${json.message}&code=${json.code}`);
     }
 
-    // 결제 성공 비즈니스 로직 추가 가능
     console.log("결제 성공:", json);
   } catch (error) {
     console.error("결제 확인 중 오류 발생:", error);
@@ -51,15 +60,15 @@ const confirmPayment = async () => {
 // 컴포넌트가 마운트되면 URL 쿼리에서 결제 정보를 가져옵니다.
 onMounted(() => {
   const urlParams = new URLSearchParams(window.location.search);
-  paymentKey.value = urlParams.get("paymentKey");
+
   orderId.value = urlParams.get("orderId");
   amount.value = urlParams.get("amount");
+  name.value = urlParams.get("name");
+  email.value = urlParams.get("email");
+  year.value = urlParams.get("year");
+  month.value = urlParams.get("month");
 
   // 결제 확인 요청을 보냅니다.
   confirmPayment();
 });
 </script>
-
-<style scoped>
-/* 필요에 따라 스타일 추가 */
-</style>

@@ -7,6 +7,8 @@ import EmployeeHome from "@/components/Employee/EmployeeHome.vue";
 import EmployeeCreate from "@/components/Manager/EmployeeCreate.vue";
 import SalariesComponent from "@/components/Manager/SalariesComponent.vue";
 import PayCheckout from "@/components/Manager/PayCheckout.vue";
+import PaySuccess from "@/components/Manager/PaySuccess.vue";
+import PayFail from "@/components/Manager/PayFail.vue";
 
 const routes = [
     {
@@ -48,6 +50,23 @@ const routes = [
         path: "/manager/pay",
         name: "PayComponent",
         component: PayCheckout,
+    },
+    {
+        path: "/manager/pay/success",
+        name: "PaySuccess",
+        component: PaySuccess,
+        props: route => ({
+            name: route.query.name,
+            email: route.query.email,
+            year: route.query.year,
+            month: route.query.month,
+            unpaid: route.query.unpaid
+        })
+    },
+    {
+        path: "/manager/pay/fail",
+        name: "PayFail",
+        component: PayFail,
     },
 ];
 

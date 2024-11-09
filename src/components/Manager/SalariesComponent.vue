@@ -26,7 +26,9 @@
             <td>{{ salary.unpaid.toLocaleString() }} 원</td>
             <td>{{ salary.status ? "지급 완료" : "미지급" }}</td>
             <td>
-              <a v-if="!salary.status" href="/manager/pay" class="pay-button">지급하러가기</a>
+              <button v-if="!salary.status" @click="goToPaymentPage(employee, salary)" class="pay-button">
+              지급하러가기
+            </button>
             </td>
           </tr>
         </template>
@@ -39,8 +41,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import {useRouter} from "vue-router";
 
 const employeeData = ref([]);
+const router = useRouter();
 
 // 필터링된 데이터만 반환 (salaries가 빈 배열이 아닌 직원들만)
 const filteredEmployeeData = computed(() => {
@@ -62,6 +66,19 @@ const fetchData = async () => {
   } catch (error) {
     console.error('데이터 요청 오류:', error);
   }
+};
+
+const goToPaymentPage = (employee, salary) => {
+  router.push({
+    path: '/manager/pay',
+    query: {
+      name: employee.employeeName,
+      email: employee.employeeEmail,
+      year: salary.year,
+      month: salary.month,
+      unpaid: salary.unpaid
+    }
+  });
 };
 
 onMounted(fetchData);

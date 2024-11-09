@@ -1,85 +1,88 @@
 <template>
-  <div>
-    <!-- 할인 쿠폰 -->
-    <div>
-      <input type="checkbox" id="coupon-box" v-model="isCouponApplied" @change="renderPaymentUI" />
-      <label for="coupon-box">5,000원 쿠폰 적용</label>
-    </div>
-    <!-- 결제 UI -->
+  <div class="layout">
+    <p><strong>지급대상사원:</strong> {{ name }}</p>
+    <p><strong>사원이메일:</strong> {{ email }}</p>
+    <p><strong></strong> {{ year }}년 {{ month }}월 월급</p>
+    <p><strong>미지급금:</strong> {{ formattedUnpaid }}</p>
     <div id="payment-method"></div>
-    <!-- 이용약관 UI -->
     <div id="agreement"></div>
-    <!-- 결제하기 버튼 -->
-    <button class="button" id="payment-button" style="margin-top: 30px" @click="requestPayment" :disabled="!inputEnabled">
-      {{ formattedAmount }} 결제하기
+    <button class="button" id="payment-button" @click="requestPayment">
+      {{ formattedUnpaid }} 결제하기
     </button>
   </div>
 </template>
 
 <script setup>
-import {ref, computed, onMounted} from "vue";
-import {loadPaymentWidget, ANONYMOUS} from "@tosspayments/payment-widget-sdk";
+import { ref, computed, onMounted } from "vue";
+import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
+import { useRoute } from "vue-router";
 
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-const baseAmount = 50000; // 기본 금액 설정
-const discount = 5000; // 할인 금액 설정
-const isCouponApplied = ref(false); // 쿠폰 적용 여부
-const paymentWidget = ref(null); // 결제 위젯 인스턴스
-const inputEnabled = ref(false); // 결제 버튼 활성화 여부
+const paymentWidget = ref(true);
 
-// 현재 결제 금액을 포맷하여 표시
-const formattedAmount = computed(() => {
-  const amount = isCouponApplied.value ? baseAmount - discount : baseAmount;
-  return `${amount.toLocaleString()}원`;
-});
+const route = useRoute();
+const name = route.query.name;
+const email = route.query.email;
+const year = route.query.year;
+const month = route.query.month;
+const unpaid = parseInt(route.query.unpaid, 10);
 
-// 결제 UI 및 이용약관 UI 렌더링
+const formattedUnpaid = computed(() => `${unpaid.toLocaleString()}원`);
+
 const renderPaymentUI = async () => {
-  const amount = isCouponApplied.value ? baseAmount - discount : baseAmount;
-
   if (paymentWidget.value) {
-    const paymentMethodWidget = await paymentWidget.value.renderPaymentMethods("#payment-method", {
-      value: amount,
-      currency: "KRW",
-      variantKey: "DEFAULT",
-    });
-
-    // 결제 UI가 준비되었을 때 버튼 활성화
-    paymentMethodWidget.on("ready", () => {
-      inputEnabled.value = true;
-    });
-
-    // 이용약관 UI 렌더링
-    await paymentWidget.value.renderAgreement("#agreement", {
-      variantKey: "AGREEMENT",
-    });
+    await paymentWidget.value.renderAgreement("#agreement", { variantKey: "AGREEMENT" });
   }
 };
 
-// 결제 요청
 const requestPayment = async () => {
   if (paymentWidget.value) {
     await paymentWidget.value.requestPayment({
-      orderId: "alApJMENzbeN9eXrYhkkV",
-      orderName: "토스 티셔츠 외 2건",
-      successUrl: window.location.origin + "/success.html",
-      failUrl: window.location.origin + "/fail.html",
-      customerEmail: "customer123@gmail.com",
-      customerName: "김토스",
-      customerMobilePhone: "01012341234",
+      orderId: `order_${Date.now()}`,
+      orderName: `${name}사원님 ${year}년 ${month}월 급여 지급`,
+      successUrl: `${window.location.origin}/manager/pay/success?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&year=${year}&month=${month}&unpaid=${unpaid}`,
+      failUrl: `${window.location.origin}/manager/pay/fail`,
+      customerEmail: email,
+      customerName: name,
     });
   }
 };
 
-// 컴포넌트 마운트 시 SDK 초기화 및 결제 위젯 설정
 onMounted(async () => {
   paymentWidget.value = await loadPaymentWidget(clientKey, ANONYMOUS);
-
-  // 초기 렌더링
+  await paymentWidget.value.renderPaymentMethods("#payment-method", { value: unpaid, currency: "KRW" });
   await renderPaymentUI();
 });
 </script>
 
 <style scoped>
 @import '../../../public/style.css';
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding-top: 10px;
+  margin-left:650px;
+}
+
+p, #payment-method, #agreement, #payment-button {
+  margin: 10px 0;
+}
+
+.button {
+  background-color: #141464;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.button:hover {
+  background-color: #0f0f52;
+}
 </style>
