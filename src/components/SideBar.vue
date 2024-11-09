@@ -24,7 +24,7 @@
         </a>
       </li>
       <li>
-        <a class="nav-link" href="/widgets">
+        <a class="nav-link" href="/manager/applies">
           <img src="../assets/logo.png" alt="Widgets" class="icon" />
           외근/휴가/정정 관리
         </a>
