@@ -26,6 +26,7 @@ const email = route.query.email;
 const year = route.query.year;
 const month = route.query.month;
 const unpaid = parseInt(route.query.unpaid, 10);
+const id = route.query.id;
 
 const formattedUnpaid = computed(() => `${unpaid.toLocaleString()}원`);
 
@@ -40,7 +41,7 @@ const requestPayment = async () => {
     await paymentWidget.value.requestPayment({
       orderId: `order_${Date.now()}`,
       orderName: `${name}사원님 ${year}년 ${month}월 급여 지급`,
-      successUrl: `${window.location.origin}/manager/pay/success?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&year=${year}&month=${month}&unpaid=${unpaid}`,
+      successUrl: `${window.location.origin}/manager/pay/success?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&year=${year}&month=${month}&unpaid=${unpaid}&id=${id}`,
       failUrl: `${window.location.origin}/manager/pay/fail`,
       customerEmail: email,
       customerName: name,

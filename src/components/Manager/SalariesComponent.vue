@@ -76,7 +76,8 @@ const goToPaymentPage = (employee, salary) => {
       email: employee.employeeEmail,
       year: salary.year,
       month: salary.month,
-      unpaid: salary.unpaid
+      unpaid: salary.unpaid,
+      id : salary.id
     }
   });
 };
