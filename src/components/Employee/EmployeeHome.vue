@@ -91,19 +91,23 @@ const closeComplaintModal = () => { isComplaintModalOpen.value = false; };
 </script>
 
 <style scoped>
-/* 기존 스타일 유지 */
 .employee-page {
   padding: 20px;
   width: 100vw;
+  position: relative;
 }
 
 .request-section {
-  margin: 20px auto;
+  margin: 0 auto;
   background: linear-gradient(to right, #89ace2, #c4b4dc, #e4d4e4);
   padding: 10px 20px;
   border-radius: 15px;
-  width: 85%;
+  width: 40%;
   text-align: center;
+  position: relative;
+  top: -20px; /* 위로 올려 근무 정보 상단 섹션과 일부 겹치도록 설정 */
+  z-index: 1; /* 근무 정보 상단 섹션 뒤에 배치 */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
@@ -165,7 +169,9 @@ const closeComplaintModal = () => { isComplaintModalOpen.value = false; };
   background-color: #f5f5f5;
   padding: 20px;
   border-radius: 10px;
-  margin-top: 20px;
+  margin-top: 40px; /* 겹치는 효과 후의 상단 여백 추가 */
+  z-index: 2; /* 근무 정보 상단 섹션이 위로 보이도록 설정 */
+  position: relative;
 }
 
 .chart {
@@ -188,4 +194,5 @@ const closeComplaintModal = () => { isComplaintModalOpen.value = false; };
 h3 {
   font-family: "Bold", sans-serif;
 }
+
 </style>
