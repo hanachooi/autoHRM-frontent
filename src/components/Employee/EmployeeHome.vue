@@ -25,6 +25,11 @@
           <p class="card-title">출퇴근 이의</p>
           <p class="card-description">폼으로 이동</p>
         </div>
+        <div class="card" @click="openComplaintModal">
+          <img src="../../assets/complaint.png" alt="icon" class="icon" />
+          <p class="card-title">신고</p>
+          <p class="card-description">폼으로 이동</p>
+        </div>
       </div>
     </div>
 
@@ -42,14 +47,11 @@
       </div>
     </div>
 
-    <!-- 외근 신청 모달 -->
+    <!-- 모달 컴포넌트들 -->
     <FieldApplyModal :isOpen="isFieldApplyModalOpen" @close="closeFieldApplyModal" />
-
-    <!-- 휴가 신청 모달 -->
     <HolidayApplyModal :isOpen="isHolidayApplyModalOpen" @close="closeHolidayApplyModal" />
-
-    <!-- 출퇴근 이의 모달 -->
     <ReviseApplyModal :isOpen="isReviseApplyModalOpen" @close="closeReviseApplyModal" />
+    <ComplaintModal :isOpen="isComplaintModalOpen" :email="userEmail" @close="closeComplaintModal" />
   </div>
 </template>
 
@@ -61,50 +63,42 @@ import CheckInStatus from "@/components/Employee/CheckInStatus.vue";
 import FieldApplyModal from "@/components/Employee/FieldApplyModal.vue";
 import HolidayApplyModal from "@/components/Employee/HolidayApplyModal.vue";
 import ReviseApplyModal from "@/components/Employee/ReviseApplyModal.vue";
+import ComplaintModal from "@/components/Employee/ComplaintModal.vue";
 
 const isRequestOpen = ref(false);
 const isFieldApplyModalOpen = ref(false);
 const isHolidayApplyModalOpen = ref(false);
 const isReviseApplyModalOpen = ref(false);
+const isComplaintModalOpen = ref(false);
+
+const userEmail = ref("emp0@example.com"); // 기본값 설정, 실제 이메일 정보를 설정하세요.
 
 const toggleRequestSection = () => {
   isRequestOpen.value = !isRequestOpen.value;
 };
 
-const openFieldApplyModal = () => {
-  isFieldApplyModalOpen.value = true;
-};
+const openFieldApplyModal = () => { isFieldApplyModalOpen.value = true; };
+const closeFieldApplyModal = () => { isFieldApplyModalOpen.value = false; };
 
-const closeFieldApplyModal = () => {
-  isFieldApplyModalOpen.value = false;
-};
+const openHolidayApplyModal = () => { isHolidayApplyModalOpen.value = true; };
+const closeHolidayApplyModal = () => { isHolidayApplyModalOpen.value = false; };
 
-const openHolidayApplyModal = () => {
-  isHolidayApplyModalOpen.value = true;
-};
+const openReviseApplyModal = () => { isReviseApplyModalOpen.value = true; };
+const closeReviseApplyModal = () => { isReviseApplyModalOpen.value = false; };
 
-const closeHolidayApplyModal = () => {
-  isHolidayApplyModalOpen.value = false;
-};
-
-const openReviseApplyModal = () => {
-  isReviseApplyModalOpen.value = true;
-};
-
-const closeReviseApplyModal = () => {
-  isReviseApplyModalOpen.value = false;
-};
+const openComplaintModal = () => { isComplaintModalOpen.value = true; };
+const closeComplaintModal = () => { isComplaintModalOpen.value = false; };
 </script>
 
-
 <style scoped>
+/* 기존 스타일 유지 */
 .employee-page {
   padding: 20px;
   width: 100vw;
 }
 
 .request-section {
-  margin: 20px auto; /* 가로 중앙 정렬 */
+  margin: 20px auto;
   background: linear-gradient(to right, #89ace2, #c4b4dc, #e4d4e4);
   padding: 10px 20px;
   border-radius: 15px;

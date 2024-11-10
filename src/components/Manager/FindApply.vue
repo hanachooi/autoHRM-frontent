@@ -41,7 +41,15 @@
             <td>{{ apply.endTime ? new Date(apply.endTime).toLocaleString() : "근무 중" }}</td>
             <td>{{ typeOptions[apply.type] || apply.type }}</td>
             <td>{{ apply.content }}</td>
-            <td>{{ apply.status }}</td>
+            <td>
+              <button @click="showStatusMenu(apply.id)" :class="['status-button', apply.status === '승인' ? 'approved' : apply.status === '반려' ? 'rejected' : 'pending']">
+                {{ apply.status || "미처리" }}
+              </button>
+              <div v-if="selectedApplyId === apply.id" class="status-menu">
+                <button @click="updateApplyStatus(apply.id, apply.type, '승인')">승인</button>
+                <button @click="updateApplyStatus(apply.id, apply.type, '반려')">반려</button>
+              </div>
+            </td>
           </tr>
         </template>
         </tbody>
@@ -66,7 +74,8 @@ const typeOptions = {
   commute: "출퇴근 이의",
 };
 
-// 데이터 가져오기 함수
+const selectedApplyId = ref(null);
+
 const fetchData = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -89,7 +98,33 @@ const fetchData = async () => {
   }
 };
 
-// 화면 렌더링 시 데이터 로드
+const showStatusMenu = (id) => {
+  selectedApplyId.value = selectedApplyId.value === id ? null : id;
+};
+
+const updateApplyStatus = async (id, type, status) => {
+  try {
+    const token = localStorage.getItem("token");
+    await axios.patch("http://localhost:8080/api/v1/apply/holiday", null, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+      params: {
+        id: id,
+        type: type,
+        status: status,
+      },
+    });
+
+    fetchData(); // 변경 후 데이터 갱신
+    selectedApplyId.value = null; // 메뉴 닫기
+  } catch (error) {
+    console.error("상태 변경 오류:", error);
+  }
+};
+
+// 초기 데이터 로드
 onMounted(() => {
   emailFilter.value = "";
   fetchData();
@@ -102,7 +137,7 @@ onMounted(() => {
   justify-content: flex-start;
   padding-top: 30px;
   width: calc(100% - 250px);
-  margin-left: 350px;
+  margin-left: 300px;
 }
 
 @font-face {
@@ -144,6 +179,35 @@ button:hover {
   background-color: #0f0f52;
 }
 
+.status-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.status-button.pending {
+  background-color: #6c757d;
+  color: white;
+}
+
+.status-button.approved {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-button.rejected {
+  background-color: #dc3545;
+  color: white;
+}
+
+.status-menu {
+  position: absolute;
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
 .applies-table {
   width: 100%;
   border-collapse: collapse;
@@ -167,8 +231,8 @@ button:hover {
 }
 
 .main-content {
-  max-width: 900px;
-  width: 900px;
+  max-width: 1500px;
+  width: 1000px;
   margin: 0 auto;
   padding-top: 20px;
 }
