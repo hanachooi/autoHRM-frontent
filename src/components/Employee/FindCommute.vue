@@ -1,76 +1,112 @@
 <template>
-  <div>
-    <div>
-      <div>
-        <label for="filterType"></label>
-        <select v-model="filterType">
-          <option value="week">주별</option>
-          <option value="month">달별</option>
-        </select>
-
-        <label for="startDate">조회 날짜:</label>
-        <input type="date" v-model="startDate" />
-
-        <button @click="fetchCommutes">조회</button>
+  <div class="commute-summary">
+    <!-- 상단 섹션: 총 근무 시간, 필터 버튼, 날짜 범위 -->
+    <div class="summary-header">
+      <h2>근무 조회</h2>
+      <div class="filter-buttons">
+        <button :class="{ active: filterType === 'month' }" @click="setFilterType('month')">월별</button>
+        <button :class="{ active: filterType === 'week' }" @click="setFilterType('week')">주별</button>
       </div>
+    </div>
 
+    <!-- 날짜 범위 표시 -->
+    <div class="date-range">
+      <button @click="previousPeriod">〈</button>
+      <span>{{ formattedDateRange }}</span>
+      <button @click="nextPeriod">〉</button>
+    </div>
+
+    <!-- 근무 리스트 -->
+    <div class="commute-list-container">
       <ul class="commute-list">
-        <li v-for="commute in commutes" :key="commute.id" class="commute-item">
-          <div class="time-info">
-            {{ formatDate(commute.startTime) }}
-          </div>
+        <li v-for="day in displayDays" :key="day" class="commute-item">
           <div class="time-bar-container">
+            <!-- 데이터가 있는 경우 근무 시간 막대 -->
             <div
+                v-if="commuteMap[day]"
                 class="time-bar"
-                :style="getBarStyle(commute.startTime, commute.endTime)"
-                @mouseover="showTimeTooltip($event, commute.startTime, commute.endTime)"
-                @mouseleave="hideTimeTooltip"
+                :style="getBarStyle(commuteMap[day].startTime, commuteMap[day].endTime)"
             ></div>
+
+            <!-- 데이터가 없는 경우 기본 기준치 막대 -->
+            <div v-else class="empty-bar"></div>
           </div>
+          <p class="date-info">{{ formatDayLabel(day) }}</p>
+          <p class="work-duration">
+            {{ commuteMap[day] ? calculateWorkHours(commuteMap[day].startTime, commuteMap[day].endTime) : '0시간 0분' }}
+          </p>
         </li>
       </ul>
-
-      <!-- Time Scale -->
-      <div class="time-scale">
-        <div v-for="hour in 25" :key="hour" class="time-marker">{{ (hour - 1) }}시</div>
-      </div>
-
-      <!-- Tooltip for displaying time -->
-      <div v-if="tooltip.visible" class="tooltip" :style="tooltip.position">
-        {{ tooltip.time }}
-      </div>
-
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
 const commutes = ref([]);
 const filterType = ref('week');
-const startDate = ref('');
+const startDate = ref(dayjs().startOf('week').add(1, 'day')); // 주 시작일을 월요일로 설정
 
-// Tooltip 관련 상태
-const tooltip = ref({
-  visible: false,
-  time: '',
-  position: {
-    left: '0px',
-    top: '0px'
+// 요일 배열 (월화수목금토일)
+const weekDays = ['월', '화', '수', '목', '금', '토', '일'];
+
+// 날짜별 데이터를 매핑하기 위한 객체
+const commuteMap = ref({});
+
+const displayDays = computed(() => {
+  const days = [];
+  if (filterType.value === 'week') {
+    for (let i = 0; i < 7; i++) {
+      days.push(startDate.value.add(i, 'day').format('YYYY-MM-DD'));
+    }
+  } else {
+    const daysInMonth = startDate.value.daysInMonth();
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(startDate.value.date(i).format('YYYY-MM-DD'));
+    }
+  }
+  return days;
+});
+
+const formattedDateRange = computed(() => {
+  const start = startDate.value;
+  if (filterType.value === 'week') {
+    const end = start.add(6, 'day');
+    return `${start.format('YYYY.MM.DD')} ~ ${end.format('YYYY.MM.DD')}`;
+  } else {
+    const end = start.endOf('month');
+    return `${start.format('YYYY.MM.DD')} ~ ${end.format('YYYY.MM.DD')}`;
   }
 });
+
+const setFilterType = (type) => {
+  filterType.value = type;
+  startDate.value = type === 'week' ? dayjs().startOf('week').add(1, 'day') : dayjs().startOf('month');
+  fetchCommutes();
+};
+
+const previousPeriod = () => {
+  const unit = filterType.value === 'week' ? 'week' : 'month';
+  startDate.value = startDate.value.subtract(1, unit);
+  fetchCommutes();
+};
+
+const nextPeriod = () => {
+  const unit = filterType.value === 'week' ? 'week' : 'month';
+  startDate.value = startDate.value.add(1, unit);
+  fetchCommutes();
+};
 
 const fetchCommutes = async () => {
   try {
     const token = localStorage.getItem('token');
-
     const response = await axios.get('http://localhost:8080/api/v1/commute/my', {
       params: {
         filterType: filterType.value,
-        startDate: startDate.value,
+        startDate: startDate.value.format('YYYY-MM-DD'),
       },
       headers: {
         'Content-Type': 'application/json',
@@ -78,109 +114,170 @@ const fetchCommutes = async () => {
       },
       withCredentials: true
     });
-
     commutes.value = response.data;
+    mapCommutesByDay();
   } catch (error) {
     console.error('Error fetching commutes:', error);
   }
 };
 
-// 시간 바의 스타일을 동적으로 계산
+const mapCommutesByDay = () => {
+  commuteMap.value = {};
+  commutes.value.forEach((commute) => {
+    const day = dayjs(commute.startTime).format('YYYY-MM-DD');
+    commuteMap.value[day] = commute;
+  });
+};
+
 const getBarStyle = (startTime, endTime) => {
   const start = dayjs(startTime);
   const end = dayjs(endTime);
 
-  const totalHours = 24; // 하루 24시간
-  const startHour = start.hour() + start.minute() / 60;
-  const endHour = end.hour() + end.minute() / 60;
-
-  const startPercentage = (startHour / totalHours) * 100;
-  const durationPercentage = ((endHour - startHour) / totalHours) * 100;
+  const totalHours = 24;
+  const duration = end.diff(start, 'minutes') / 60;
+  const heightPercentage = (duration / totalHours) * 100;
 
   return {
-    left: `${startPercentage}%`,
-    width: `${durationPercentage}%`
+    height: `${Math.min(heightPercentage, 100)}%`,
+    backgroundColor: heightPercentage > 33 ? '#6f42c1' : '#007bff',
   };
 };
 
-// 날짜 포맷팅
-const formatDate = (datetime) => {
-  return dayjs(datetime).format('YYYY-MM-DD');
+const formatDayLabel = (day) => {
+  const dayOfWeek = dayjs(day).day();
+  return weekDays[dayOfWeek === 0 ? 6 : dayOfWeek - 1] + '(' + dayjs(day).format('DD') + ')';
 };
 
-// Tooltip 표시
-const showTimeTooltip = (event, startTime, endTime) => {
-  const start = dayjs(startTime).format('HH:mm');
-  const end = dayjs(endTime).format('HH:mm');
-  tooltip.value.time = `${start} - ${end}`;
-  tooltip.value.visible = true;
+const calculateWorkHours = (startTime, endTime) => {
+  const start = dayjs(startTime);
+  const end = dayjs(endTime);
+  const duration = end.diff(start, 'minutes');
 
-  const { clientX, clientY } = event;
-  tooltip.value.position = {
-    left: `${clientX}px`,
-    top: `${clientY - 40}px` // 툴팁이 마우스 위로 나타나도록
-  };
+  const hours = Math.floor(duration / 60);
+  const minutes = duration % 60;
+  return `${hours}시간 ${minutes}분`;
 };
 
-// Tooltip 숨김
-const hideTimeTooltip = () => {
-  tooltip.value.visible = false;
-};
-
+onMounted(fetchCommutes);
 </script>
 
 <style scoped>
+.commute-summary {
+  background: white;
+  border: #e4d4e4 solid 2px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height : 350px;
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-buttons button {
+  background-color: #e7e9ed;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.filter-buttons .active {
+  background-color: #c4b4dc;
+  color: white;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.date-range button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #3a7bd5;
+}
+
+.commute-list-container {
+  overflow-x: auto;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .commute-list {
   list-style-type: none;
   padding: 0;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
 }
 
 .commute-item {
-  margin: 10px 0;
-}
-
-.time-info {
-  font-weight: bold;
+  text-align: center;
+  width: 60px;
 }
 
 .time-bar-container {
   background-color: #e9ecef;
   border-radius: 5px;
-  height: 20px;
+  height: 150px; /* 24시간 기준 고정 세로폭 */
   position: relative;
   margin-bottom: 5px;
+  display: flex;
+  align-items: flex-end;
 }
 
 .time-bar {
-  background-color: #007bff;
-  height: 100%;
+  width: 100%;
   border-radius: 5px;
-  position: absolute;
+  transition: height 0.3s ease;
 }
 
-.time-scale {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+.empty-bar {
+  background-color: rgba(200, 200, 200, 0.3); /* 기준 표시용 회색 막대 */
+  width: 100%;
+  height: 100%; /* 24시간 기준 높이 */
 }
 
-.time-marker {
+.date-info {
+  font-size: 14px;
+  margin-top: 5px;
+  color: #555;
+}
+
+.work-duration {
   font-size: 12px;
+  color: #3a7bd5;
+}
+
+h2 {
+  font-family: 'Bold', sans-serif;
+  font-size: 20px;
   text-align: center;
-  flex: 1;
-  border-left: 1px solid #ccc;
-  padding-left: 2px;
-  margin-left: -1px;
-}
-
-.tooltip {
-  position: absolute;
-  background-color: #333;
-  color: white;
-  padding: 5px;
-  border-radius: 3px;
-  font-size: 12px;
-  pointer-events: none;
-  z-index: 1000; /* 툴팁이 다른 요소들 위로 오도록 */
+  font-color : black;
 }
 </style>

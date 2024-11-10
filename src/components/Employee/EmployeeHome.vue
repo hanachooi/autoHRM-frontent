@@ -35,13 +35,11 @@
 
     <!-- 근무 시간 그래프 섹션 -->
     <div class="work-hours-section">
-      <h3>근무 조회</h3>
       <div class="chart">
         <FindCommute />
       </div>
     </div>
     <div class="work-hours-section">
-      <h3>수당 조회</h3>
       <div class="chart">
         <FindAllowance />
       </div>
@@ -167,7 +165,6 @@ const closeComplaintModal = () => { isComplaintModalOpen.value = false; };
 
 .work-hours-section {
   background-color: #f5f5f5;
-  padding: 20px;
   border-radius: 10px;
   margin-top: 40px; /* 겹치는 효과 후의 상단 여백 추가 */
   z-index: 2; /* 근무 정보 상단 섹션이 위로 보이도록 설정 */
@@ -176,9 +173,8 @@ const closeComplaintModal = () => { isComplaintModalOpen.value = false; };
 
 .chart {
   background-color: white;
-  padding: 20px;
   border-radius: 10px;
-  height: 200px;
+  height: 350px;
   display: flex;
   justify-content: center;
   align-items: center;
