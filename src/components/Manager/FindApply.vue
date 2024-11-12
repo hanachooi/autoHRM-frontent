@@ -105,7 +105,7 @@ const showStatusMenu = (id) => {
 const updateApplyStatus = async (id, type, status) => {
   try {
     const token = localStorage.getItem("token");
-    await axios.patch("http://localhost:8080/api/v1/apply/holiday", null, {
+    await axios.patch("http://172.27.0.13:8080/api/v1/apply/holiday", null, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`,

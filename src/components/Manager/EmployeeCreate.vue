@@ -71,7 +71,7 @@ const departments = ref([]);
 onMounted(async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:8080/api/v1/department/my', {
+    const response = await axios.get('http://172.27.0.13:8080/api/v1/department/my', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `${token}`

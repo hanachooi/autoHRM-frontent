@@ -103,7 +103,7 @@ const nextPeriod = () => {
 const fetchCommutes = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:8080/api/v1/commute/my', {
+    const response = await axios.get('http://172.27.0.13:8080/api/v1/commute/my', {
       params: {
         filterType: filterType.value,
         startDate: startDate.value.format('YYYY-MM-DD'),

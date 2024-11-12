@@ -36,7 +36,7 @@
         </a>
       </li>
       <li>
-        <a class="nav-link" href="/pages">
+        <a class="nav-link" href="/manager/complaint">
           <img src="../assets/logo.png" alt="Pages" class="icon" />
           지원
         </a>

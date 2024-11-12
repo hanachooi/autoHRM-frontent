@@ -54,7 +54,7 @@ const submitComplaint = async () => {
       description: description.value,
     };
 
-    await axios.post("http://localhost:8080/api/v1/complaint", requestData, {
+    await axios.post("http://172.27.0.13:8080/api/v1/complaint", requestData, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`,

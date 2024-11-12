@@ -130,7 +130,7 @@ const getScheduleType = (schedule) => {
 // Fetch employee data function
 const fetchEmployeeData = async (email) => {
   try {
-    const response = await axios.get('http://localhost:8080/api/v1/employee', {
+    const response = await axios.get('http://172.27.0.13:8080/api/v1/employee', {
       params: {employeeEmail: email},
     });
     employeeData.value = response.data;

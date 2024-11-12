@@ -56,7 +56,7 @@ h1 {
   console.log(token)
 
   // axios 요청 보내기
-  const response = await axios.get(`http://localhost:8080/api/v1/salary/my`, {
+  const response = await axios.get(`http://172.27.0.13:8080/api/v1/salary/my`, {
   headers: {
   'Content-Type': 'application/json',
   'Authorization': `${token}`,

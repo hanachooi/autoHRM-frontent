@@ -70,7 +70,7 @@ const salaryRequest = ref({
 // Submit salary data to backend
 const submitSalary = async () => {
   try {
-    await axios.post('http://localhost:8080/api/v1/salary', salaryRequest.value);
+    await axios.post('http://172.27.0.13:8080/api/v1/salary', salaryRequest.value);
     alert("기본급여금이 성공적으로 등록되었습니다.");
     emitClose(); // Close modal on success
   } catch (error) {

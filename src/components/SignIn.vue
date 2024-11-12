@@ -120,7 +120,7 @@ export default {
     },
     async login() {
       try {
-        const response = await axios.post("http://localhost:8080/login", null, {
+        const response = await axios.post("http://211.253.28.110:8080/login", null, {
           params: {
             email: this.email,
             password: this.password,
@@ -151,7 +151,7 @@ export default {
     },
     async submitForm() {
       try {
-        const response = await axios.post('http://localhost:8080/company', this.companyDTO);
+        const response = await axios.post('http://211.253.28.110:8080/company', this.companyDTO);
         if (response.status === 200) {
           alert('회사 생성이 완료되었습니다. 입력한 이메일과 비밀번호로 서비스를 이용할 수 있습니다.');
         }

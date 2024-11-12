@@ -61,7 +61,7 @@ const submitRectify = async () => {
       content: content.value,
     };
 
-    await axios.post("http://localhost:8080/api/v1/apply/fieldwork", requestData, {
+    await axios.post("http://172.27.0.13:8080/api/v1/apply/fieldwork", requestData, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`,

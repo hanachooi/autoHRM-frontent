@@ -11,6 +11,7 @@ import PaySuccess from "@/components/Manager/PaySuccess.vue";
 import PayFail from "@/components/Manager/PayFail.vue";
 import EmployeeCommutes from "@/components/Manager/EmployeeCommutes.vue";
 import FindApply from "@/components/Manager/FindApply.vue";
+import ManagerComplaint from "@/components/Manager/ManagerComplaint.vue";
 
 const routes = [
     {
@@ -80,6 +81,11 @@ const routes = [
         path: "/manager/applies",
         name: "FindApply",
         component: FindApply,
+    },
+    {
+        path: "/manager/complaint",
+        name: "ManagerComplaint",
+        component: ManagerComplaint,
     },
 ];
 

@@ -68,7 +68,7 @@ const fetchAllowances = async () => {
 
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`http://localhost:8080/api/v1/allowance/my`, {
+    const response = await axios.get(`http://172.27.0.13:8080/api/v1/allowance/my`, {
       params: {
         startOfMonth,
         endOfMonth,
