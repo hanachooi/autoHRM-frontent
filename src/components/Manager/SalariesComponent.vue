@@ -54,7 +54,7 @@ const filteredEmployeeData = computed(() => {
 const fetchData = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:8080/api/v1/salaries/my', {
+    const response = await axios.get('http://211.253.28.110:8080/api/v1/salaries/my', {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${token}`,

@@ -79,7 +79,7 @@ const selectedApplyId = ref(null);
 const fetchData = async () => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get("http://localhost:8080/api/v1/applies/my", {
+    const response = await axios.get("http://211.253.28.110:8080/api/v1/applies/my", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`,
@@ -105,7 +105,7 @@ const showStatusMenu = (id) => {
 const updateApplyStatus = async (id, type, status) => {
   try {
     const token = localStorage.getItem("token");
-    await axios.patch("http://172.27.0.13:8080/api/v1/apply/holiday", null, {
+    await axios.patch("http://211.253.28.110:8080/api/v1/apply/holiday", null, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`,

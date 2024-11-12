@@ -23,23 +23,20 @@
             <th>근무일</th>
             <th>근무유형</th>
             <th>수당유형</th>
-            <th>시간</th>
-            <th>수당</th>
+            <th>시간(분)</th>
           </tr>
           </thead>
           <tbody>
           <template v-for="item in allowances" :key="item.date">
-            <tr v-if="item.allowances && item.allowances.length">
+            <tr v-if="item.allowances && item.allowances.some(allowance => allowance.time > 0)">
               <td :rowspan="item.allowances.length">{{ item.date }}</td>
               <td :rowspan="item.allowances.length">{{ formatWorkType(item.type) }}</td>
               <td>{{ formatAllowanceType(item.allowances[0]?.type) }}</td>
               <td>{{ item.allowances[0]?.time || 0 }}</td>
-              <td>{{ item.allowances[0]?.allowancePay || 0 }}</td>
             </tr>
             <tr v-for="(allowance, index) in item.allowances.slice(1)" :key="index">
               <td>{{ formatAllowanceType(allowance.type) }}</td>
               <td>{{ allowance.time }}</td>
-              <td>{{ allowance.allowancePay }}</td>
             </tr>
           </template>
           </tbody>
@@ -68,7 +65,7 @@ const fetchAllowances = async () => {
 
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`http://172.27.0.13:8080/api/v1/allowance/my`, {
+    const response = await axios.get(`http://211.253.28.110:8080/api/v1/allowance/my`, {
       params: {
         startOfMonth,
         endOfMonth,
@@ -120,7 +117,7 @@ onMounted(fetchAllowances);
 <style scoped>
 .layout {
   display: flex;
-  justify-content: center; /* 전체 레이아웃을 중앙에 정렬 */
+  justify-content: center;
   background: white;
   border: #e4d4e4 solid 2px;
   width: 100%;
@@ -134,7 +131,7 @@ onMounted(fetchAllowances);
 
 .main-content {
   max-width: 700px;
-  width: 100%; /* 화면에 맞게 늘어나도록 */
+  width: 100%;
   padding: 20px;
 }
 
@@ -142,7 +139,7 @@ h2 {
   font-family: 'Bold', sans-serif;
   font-size: 24px;
   margin-bottom: 20px;
-  text-align: center; /* 제목을 중앙에 정렬 */
+  text-align: center;
 }
 
 .form-group {
@@ -193,6 +190,6 @@ th {
   margin-top: 20px;
   font-size: 18px;
   color: #888;
-  text-align: center; /* 결과 없음 메시지를 중앙에 정렬 */
+  text-align: center;
 }
 </style>

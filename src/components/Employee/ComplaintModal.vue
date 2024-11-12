@@ -6,9 +6,8 @@
       <form @submit.prevent="submitComplaint">
         <div class="form-group">
           <label for="email">이메일:</label>
-          <input type="email" :value="email" readonly />
+          <input type="text" :value="email" disabled />
         </div>
-
         <div class="form-group">
           <label for="title">제목:</label>
           <input type="text" v-model="title" placeholder="제목을 입력하세요" required />
@@ -54,7 +53,7 @@ const submitComplaint = async () => {
       description: description.value,
     };
 
-    await axios.post("http://172.27.0.13:8080/api/v1/complaint", requestData, {
+    await axios.post("http://211.253.28.110:8080/api/v1/complaint", requestData, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`,

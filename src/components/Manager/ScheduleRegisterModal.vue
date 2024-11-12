@@ -62,7 +62,7 @@ const scheduleRequest = ref({
 // submitSchedule function
 const submitSchedule = async () => {
   try {
-    await axios.post('http://172.27.0.13:8080/api/v1/schedule/', scheduleRequest.value);
+    await axios.post('http://211.253.28.110:8080/api/v1/schedule/', scheduleRequest.value);
     alert("스케줄이 성공적으로 등록되었습니다.");
     emitClose();
   } catch (error) {

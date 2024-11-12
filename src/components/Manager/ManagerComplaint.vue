@@ -9,16 +9,23 @@ const complaintCount = ref(0);
 // API 요청을 통해 데이터를 가져오는 함수
 const fetchComplaints = async () => {
   try {
+    const token = localStorage.getItem('token');
     // 신고 내역 가져오기
-    const responseComplaints = await axios.get('http://172.27.0.13:8080/api/v1/complaint/my', {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+    const responseComplaints = await axios.get('http://211.253.28.110:8080/api/v1/complaint/my', {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
       withCredentials: true,
     });
     complaints.value = responseComplaints.data;
 
     // 신고 횟수 가져오기
-    const responseCount = await axios.get('http://172.27.0.13:8080/api/v1/complaint/count/my', {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+    const responseCount = await axios.get('http://211.253.28.110:8080/api/v1/complaint/count/my', {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
       withCredentials: true,
     });
     complaintCount.value = responseCount.data;

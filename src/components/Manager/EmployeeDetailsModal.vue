@@ -32,12 +32,8 @@
             <td>{{ employeeData.month !== null ? employeeData.month : '등록을 해야 합니다' }}</td>
           </tr>
           <tr>
-            <th>임금</th>
+            <th>단위 임금(10M)</th>
             <td>{{ employeeData.wage !== null ? employeeData.wage : '등록을 해야 합니다' }}</td>
-          </tr>
-          <tr>
-            <th>분 단위 임금</th>
-            <td>{{ employeeData.minuteWage !== null ? employeeData.minuteWage : '등록을 해야 합니다' }}</td>
           </tr>
           <tr>
             <th>급여</th>
@@ -130,10 +126,15 @@ const getScheduleType = (schedule) => {
 // Fetch employee data function
 const fetchEmployeeData = async (email) => {
   try {
-    const response = await axios.get('http://172.27.0.13:8080/api/v1/employee', {
-      params: {employeeEmail: email},
+    const response = await axios.get('http://211.253.28.110:8080/api/v1/employee', {
+      params: { employeeEmail: email },
     });
     employeeData.value = response.data;
+
+    // year 값이 존재하고 month 값이 없는 경우, month를 11로 설정
+    if (employeeData.value.year && !employeeData.value.month) {
+      employeeData.value.month = 11;
+    }
   } catch (error) {
     console.error('Error fetching employee data:', error);
   }

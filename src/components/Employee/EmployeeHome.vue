@@ -1,7 +1,7 @@
 <template>
   <div class="employee-page">
     <!-- 근무 정보 상단 섹션 -->
-    <CheckInStatus />
+    <CheckInStatus @updateEmail="setEmail" />
 
     <!-- 신청하기 섹션 -->
     <div class="request-section">
@@ -68,9 +68,13 @@ const isFieldApplyModalOpen = ref(false);
 const isHolidayApplyModalOpen = ref(false);
 const isReviseApplyModalOpen = ref(false);
 const isComplaintModalOpen = ref(false);
+ // 기본값 설정, 실제 이메일 정보를 설정하세요.
+const userEmail = ref("");
 
-const userEmail = ref("emp0@example.com"); // 기본값 설정, 실제 이메일 정보를 설정하세요.
-
+// CheckInStatus로부터 이메일 정보를 업데이트
+const setEmail = (email) => {
+  userEmail.value = email;
+};
 const toggleRequestSection = () => {
   isRequestOpen.value = !isRequestOpen.value;
 };

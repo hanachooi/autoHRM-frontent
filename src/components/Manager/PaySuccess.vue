@@ -28,7 +28,7 @@ const confirmPayment = async () => {
   try {
     console.log(id.value)
     console.log(amount.value)
-    const response = await axios.patch('http://172.27.0.13:8080/api/v1/salary/ok',
+    const response = await axios.patch('http://211.253.28.110:8080/api/v1/salary/ok',
         null, // 본문 데이터가 필요하지 않을 경우 null을 두 번째 인자로 전달
         {
           headers: {

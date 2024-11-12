@@ -32,6 +32,8 @@ const currentTime = ref(format(new Date(), "hh:mm:ss a M/d (EEE)"));
 const workTimeMessage = ref("00:00:00");
 const isCheckedIn = ref(false);
 const employeeName = ref("");
+// eslint-disable-next-line no-undef
+const emit = defineEmits(["updateEmail"]);
 
 // 실시간 시간 업데이트
 setInterval(() => {
@@ -42,7 +44,7 @@ const fetchData = async () => {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await axios.get("http://172.27.0.13:8080/api/v1/commute/status/my", {
+    const response = await axios.get("http://211.253.28.110:8080/api/v1/commute/status/my", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`,
@@ -50,7 +52,8 @@ const fetchData = async () => {
       withCredentials: true,
     });
 
-    const { name, startTime, status } = response.data;
+    const { name, startTime, status, email } = response.data;
+    emit("updateEmail", email);
     employeeName.value = name;
     isCheckedIn.value = status;
 
