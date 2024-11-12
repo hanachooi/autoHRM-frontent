@@ -170,9 +170,11 @@ const closeComplaintModal = () => { isComplaintModalOpen.value = false; };
 .work-hours-section {
   background-color: #f5f5f5;
   border-radius: 10px;
-  margin-top: 40px; /* 겹치는 효과 후의 상단 여백 추가 */
+  margin-top: 60px; /* 겹치는 효과 후의 상단 여백 추가 */
   z-index: 2; /* 근무 정보 상단 섹션이 위로 보이도록 설정 */
   position: relative;
+  padding-top : 10px;
+  margin-bottom: 10px;
 }
 
 .chart {
@@ -182,7 +184,6 @@ const closeComplaintModal = () => { isComplaintModalOpen.value = false; };
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #888;
 }
 
 @font-face {

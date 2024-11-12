@@ -32,7 +32,7 @@
             <td>{{ employeeData.month !== null ? employeeData.month : '등록을 해야 합니다' }}</td>
           </tr>
           <tr>
-            <th>단위 임금(10M)</th>
+            <th>단위 임금(10m)</th>
             <td>{{ employeeData.wage !== null ? employeeData.wage : '등록을 해야 합니다' }}</td>
           </tr>
           <tr>

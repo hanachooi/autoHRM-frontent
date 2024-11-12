@@ -1,13 +1,16 @@
 <template>
   <div class="image-container">
     <img class="login-header" alt="Login Header" src="../assets/loginheader.jpg"/>
-    <div class="welcome-text">AUTOHRM 서비스에 오신것을 환영합니다.</div>
+    <div class="welcome-text">
+      <button @click="showLaborLawModal" class="law-button">AUTOHRM 서비스는 근로근로법을 기준으로 합니다. 클릭하여 관련 조항을 확인하세요.</button>
+    </div>
 
     <!-- 버튼 영역 -->
     <div class="button-container">
       <button @click="showLoginOverlay" class="login-button">로그인</button>
       <button @click="showSignupOverlay" class="company-join-button">회원가입 for company</button>
     </div>
+    <LawModal :isOpen="isLaborLawModalVisible" @close="hideLaborLawModal" />
 
     <!-- 로그인 폼 오버레이 -->
     <div v-if="isLoginOverlayVisible" class="overlay" @click.self="hideLoginOverlay">
@@ -82,15 +85,20 @@
 import axios from "axios";
 import { parseJwt } from "@/utils/auth";
 import router from "@/router";
+import LawModal from "@/components/LawModal.vue"; // 올바른 LawModal 컴포넌트 참조
 
 export default {
   name: "SignIn",
+  components: {
+    LawModal, // 컴포넌트 참조 수정
+  },
   data() {
     return {
       email: "",
       password: "",
       isLoginOverlayVisible: false,
       isSignupOverlayVisible: false,
+      isLaborLawModalVisible: false, // 근로기준법 모달 가시성 제어
       companyDTO: {
         companyName: '',
         companyAddress: '',
@@ -117,6 +125,12 @@ export default {
     },
     hideSignupOverlay() {
       this.isSignupOverlayVisible = false;
+    },
+    showLaborLawModal() {
+      this.isLaborLawModalVisible = true;
+    },
+    hideLaborLawModal() {
+      this.isLaborLawModalVisible = false;
     },
     async login() {
       try {
@@ -163,6 +177,8 @@ export default {
   }
 };
 </script>
+
+
 
 <style scoped>
 body {
@@ -293,6 +309,64 @@ input[type="password"] {
   height: auto;
   margin: 0 auto 20px; /* 가운데 정렬과 아래쪽 여백 추가 */
   display: block;
+}
+.welcome-text {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  text-align: center;
+}
+
+.law-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #706bad;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.3s;
+}
+
+.law-button:hover {
+  background-color: #55488d;
+  color: white;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+}
+
+.company-join-button,
+.login-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #706bad;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 180px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.company-join-button:hover,
+.login-button:hover {
+  background-color: #55488d;
 }
 
 </style>
